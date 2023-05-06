@@ -1,3 +1,14 @@
-textarea {
-    min-height: 400px;
+#compose-body {
+  min-height: 300px;
+  
+}
+
+#row {
+  border: solid;
+  margin-bottom: 5px;
+}
+
+.col {
+  text-align: center;
+
 }
