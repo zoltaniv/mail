@@ -1,14 +1,35 @@
 #compose-body {
-  min-height: 300px;
-  
+  min-height: 200px;
 }
 
 #row {
-  border: solid;
+  border: solid 1px;
   margin-bottom: 5px;
+  padding-left: 10px;
 }
 
-.col {
-  text-align: center;
+#row:hover {
+  border: solid 2px;
+}
 
+#archive, #dearchive {
+  float: right;
+  display: block;
+  background-color: blueviolet; /* Green */
+  border: solid 1px black;
+  color: white;
+  padding: 0px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+#dearchive:hover, #archive:hover {
+  border: solid 2px;
+}
+
+#body {
+  border-top: solid 1px gray;
+  padding: 20px 40px;
 }

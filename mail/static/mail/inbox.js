@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
   //  Submit new email
   document.querySelector('#compose-form').addEventListener('submit', send_email);
 
-
   // By default, load the inbox
   load_mailbox('inbox');
 });
@@ -47,11 +46,61 @@ function load_mailbox(mailbox) {
         element.id = 'row';
         element.innerHTML = `From: ${email.sender} | Subject: ${email.subject} | Date: ${email.timestamp}`;
         // Check, is the mail readed
-        if (email.read === true) {
+        if (email.read === true) 
           element.style.background = 'lightgray';
-        }
-        // Add eventListener for click
+        
+        // Add eventListeners 
         element.onclick = () => load_email(email.id);
+        
+        // Create archive button
+        if (mailbox == 'inbox') {
+          const archiveButton = document.createElement('button');
+          archiveButton.type = 'submit';
+          archiveButton.innerHTML = 'Archive';
+          archiveButton.id = 'archive';
+          archiveButton.onclick = () => {
+            // Mark email as archived
+            fetch(`/emails/${email.id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                archived: true
+              })
+            })
+            .then(response => {
+              if (response.ok) load_mailbox('inbox');
+            })
+            .catch(error => {
+              console.log(error);
+            });
+          };
+          // Add the button to div element
+          document.querySelector('#emails-view').append(archiveButton);
+        }
+
+        // Create dearchive button
+        if (mailbox == 'archive') {
+          const archiveButton = document.createElement('button');
+          archiveButton.type = 'submit';
+          archiveButton.innerHTML = 'Dearchive';
+          archiveButton.id = 'dearchive';
+          archiveButton.onclick = () => {
+            // Mark email as archived
+            fetch(`/emails/${email.id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                archived: false
+              })
+            })
+            .then(response => {
+              if (response.ok) load_mailbox('inbox');
+            })
+            .catch(error => {
+              console.log(error);
+            });
+          };
+          // Add the button to div element
+          document.querySelector('#emails-view').append(archiveButton);
+        }
 
         // Add row element to div id=emails-view
         document.querySelector('#emails-view').append(element);
@@ -65,6 +114,14 @@ function load_mailbox(mailbox) {
 
 // Open email =========================================================================================
 function load_email(email_id) {
+
+  // Mark email as readed
+  fetch(`/emails/${email_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: true
+    })
+  })
 
   // Show the email and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -91,9 +148,9 @@ function load_email(email_id) {
       }
       // Create elements
       for (let property in email) {
-        if (property == 'id' | property == 'read' | property == 'archived' | property == 'body') {
+        if (property == 'id' | property == 'read' | property == 'archived' | property == 'body')
           continue;
-        }
+        
         const element = document.querySelector(`#${property}`);
         element.innerHTML = `${email[property]}`;
       }
