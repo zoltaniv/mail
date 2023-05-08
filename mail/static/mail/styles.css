@@ -15,7 +15,7 @@
 #archive, #dearchive {
   float: right;
   display: block;
-  background-color: blueviolet; /* Green */
+  background-color: blueviolet;
   border: solid 1px black;
   color: white;
   padding: 0px 20px;
@@ -25,11 +25,12 @@
   font-size: 16px;
 }
 
-#dearchive:hover, #archive:hover {
+#dearchive:hover, #archive:hover, #response:hover {
   border: solid 2px;
 }
 
 #body {
   border-top: solid 1px gray;
   padding: 20px 40px;
+  background: lightgoldenrodyellow;
 }

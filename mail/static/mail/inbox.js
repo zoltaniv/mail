@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+
 function compose_email() {
 
   // Show compose view and hide other views
@@ -24,6 +25,20 @@ function compose_email() {
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
 }
+
+
+function compose_emailResponse(recipient, subject, body) {
+  // Show compose view and hide other views
+  document.querySelector('#email-view').style.display = 'none';
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  // Clear out composition fields
+  document.querySelector('#compose-recipients').value = `${recipient}`;
+  document.querySelector('#compose-subject').value = `${subject}`;
+  document.querySelector('#compose-body').value = `${body}`;
+}
+
 
 // Load mailbox ======================================================================================================
 function load_mailbox(mailbox) {
@@ -79,11 +94,11 @@ function load_mailbox(mailbox) {
 
         // Create dearchive button
         if (mailbox == 'archive') {
-          const archiveButton = document.createElement('button');
-          archiveButton.type = 'submit';
-          archiveButton.innerHTML = 'Dearchive';
-          archiveButton.id = 'dearchive';
-          archiveButton.onclick = () => {
+          const dearchiveButton = document.createElement('button');
+          dearchiveButton.type = 'submit';
+          dearchiveButton.innerHTML = 'Dearchive';
+          dearchiveButton.id = 'dearchive';
+          dearchiveButton.onclick = () => {
             // Mark email as archived
             fetch(`/emails/${email.id}`, {
             method: 'PUT',
@@ -99,7 +114,7 @@ function load_mailbox(mailbox) {
             });
           };
           // Add the button to div element
-          document.querySelector('#emails-view').append(archiveButton);
+          document.querySelector('#emails-view').append(dearchiveButton);
         }
 
         // Add row element to div id=emails-view
@@ -134,7 +149,7 @@ function load_email(email_id) {
   document.querySelector('#subject').innerHTML = '';
   document.querySelector('#timestamp').innerHTML = '';
   document.querySelector('#body').innerHTML = '';
-  
+
   // Send GET request to server ..........................
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
@@ -150,13 +165,24 @@ function load_email(email_id) {
       for (let property in email) {
         if (property == 'id' | property == 'read' | property == 'archived' | property == 'body')
           continue;
-        
         const element = document.querySelector(`#${property}`);
         element.innerHTML = `${email[property]}`;
       }
       // Create body element
       const element = document.querySelector('#body');
       element.innerHTML = `${email.body}`;
+      
+      // Get arguments for compose_emailResponse fuction
+      var recipient = email.sender;
+      var subject = '';
+      if (email.subject.substr(0, 3) !== 'Re:') {
+        subject = `Re: ${email.subject}`;
+      }
+      else {
+        subject = email.subject;
+      }
+      var body = `On ${email.timestamp} ${email.sender} has written:`;
+      document.querySelector('#response').onclick = () => compose_emailResponse(recipient, subject, body);
   })
   .catch(error => {
     console.log(error);
@@ -169,9 +195,9 @@ function send_email() {
   // Stop sending the form
   event.preventDefault();
   // Get data for email
-  const recipients = document.querySelector('#compose-recipients').value;
-  const subject = document.querySelector('#compose-subject').value;
-  const body = document.querySelector('#compose-body').value;
+  var recipients = document.querySelector('#compose-recipients').value;
+  var subject = document.querySelector('#compose-subject').value;
+  var body = document.querySelector('#compose-body').value;
   // Send POST request
   fetch('/emails', {
     method: 'POST',
@@ -191,7 +217,7 @@ function send_email() {
       // Load send folder
       load_mailbox('sent');
       // Finish submit event
-      document.getElementById("compose-form").requestSubmit("submit");
-
+      let myForm = document.querySelector('#compose-form');
+      myForm.requestSubmit('submit');
   });
 }
