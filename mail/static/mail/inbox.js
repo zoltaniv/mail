@@ -58,8 +58,9 @@ function load_mailbox(mailbox) {
       emails.forEach(email => {
         // Craete div element class row ....................
         const element = document.createElement('div');
-        element.id = 'row';
+        element.className = 'row';
         element.innerHTML = `From: ${email.sender} | Subject: ${email.subject} | Date: ${email.timestamp}`;
+        
         // Check, is the mail readed
         if (email.read === true) 
           element.style.background = 'lightgray';
@@ -72,24 +73,29 @@ function load_mailbox(mailbox) {
           const archiveButton = document.createElement('button');
           archiveButton.type = 'submit';
           archiveButton.innerHTML = 'Archive';
-          archiveButton.id = 'archive';
-          archiveButton.onclick = () => {
+          archiveButton.className = 'archive';
+          archiveButton.onclick = (event) => {
+            // Stop propagation event click
+            event.stopPropagation();
             // Mark email as archived
             fetch(`/emails/${email.id}`, {
             method: 'PUT',
             body: JSON.stringify({
                 archived: true
-              })
+              }) 
             })
-            .then(response => {
-              if (response.ok) load_mailbox('inbox');
+              .then(response => {
+              // Remove mail element
+              if (response.ok) { 
+                archiveButton.parentElement.remove();
+              } 
             })
             .catch(error => {
               console.log(error);
             });
           };
           // Add the button to div element
-          document.querySelector('#emails-view').append(archiveButton);
+          element.append(archiveButton);
         }
 
         // Create dearchive button
@@ -97,24 +103,28 @@ function load_mailbox(mailbox) {
           const dearchiveButton = document.createElement('button');
           dearchiveButton.type = 'submit';
           dearchiveButton.innerHTML = 'Dearchive';
-          dearchiveButton.id = 'dearchive';
-          dearchiveButton.onclick = () => {
+          dearchiveButton.className = 'dearchive';
+          dearchiveButton.onclick = (event) => {
+            // Stop propagation event click
+            event.stopPropagation();
             // Mark email as archived
             fetch(`/emails/${email.id}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-                archived: false
+              method: "PUT",
+              body: JSON.stringify({
+                archived: false,
+              }),
+            })
+              .then((response) => {
+                if (response.ok) { 
+                  dearchiveButton.parentElement.remove();
+                }
               })
-            })
-            .then(response => {
-              if (response.ok) load_mailbox('inbox');
-            })
-            .catch(error => {
-              console.log(error);
-            });
+              .catch((error) => {
+                console.log(error);
+              });
           };
           // Add the button to div element
-          document.querySelector('#emails-view').append(dearchiveButton);
+          element.append(dearchiveButton);
         }
 
         // Add row element to div id=emails-view

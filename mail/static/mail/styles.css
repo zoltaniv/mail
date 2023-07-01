@@ -2,17 +2,17 @@
   min-height: 200px;
 }
 
-#row {
+.row {
   border: solid 1px;
   margin-bottom: 5px;
   padding-left: 10px;
 }
 
-#row:hover {
+.row:hover {
   border: solid 2px;
 }
 
-#archive, #dearchive {
+.archive, .dearchive {
   float: right;
   display: block;
   background-color: blueviolet;
@@ -25,7 +25,7 @@
   font-size: 16px;
 }
 
-#dearchive:hover, #archive:hover, #response:hover {
+.dearchive:hover, .archive:hover, #response:hover {
   border: solid 2px;
 }
 
