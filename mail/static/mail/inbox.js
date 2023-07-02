@@ -106,7 +106,10 @@ function load_mailbox(mailbox) {
               .then(response => {
               // Remove mail element
               if (response.ok) { 
-                archiveButton.parentElement.remove();
+                archiveButton.parentElement.style.animationPlayState = 'running';
+                archiveButton.parentElement.addEventListener('animationend', () => {
+                  archiveButton.parentElement.remove();
+                })
               } 
             })
             .catch(error => {
@@ -135,7 +138,14 @@ function load_mailbox(mailbox) {
             })
               .then((response) => {
                 if (response.ok) { 
-                  dearchiveButton.parentElement.remove();
+                  dearchiveButton.parentElement.style.animationPlayState =
+                    "running";
+                  dearchiveButton.parentElement.addEventListener(
+                    "animationend",
+                    () => {
+                      dearchiveButton.parentElement.remove();
+                    }
+                  );
                 }
               })
               .catch((error) => {

@@ -1,13 +1,45 @@
 #compose-body {
   min-height: 200px;
 }
+/* Delete animation for the row */
+@keyframes delete {
+  0% {
+    opacity: 1;
+    height: 100%;
+    line-height: 100%;
+    padding: 4px;
+    margin-bottom: 6px;
+  }
+
+  75% {
+    opacity: 0;
+    height: 100%;
+    line-height: 100%;
+    padding: 4px;
+    margin-bottom: 6px;
+  }
+
+  100% {
+    opacity: 0;
+    height: 0px;
+    line-height: 0px;
+    padding: 0px;
+    margin-bottom: 0px;
+  }
+}
 
 .row {
   border: solid 1px;
-  margin-bottom: 5px;
-  padding-left: 10px;
+  margin-bottom: 6px;
+  padding: 4px;
   display: flex;
   justify-content: space-between;
+  /* Create delete animation */
+  animation-name: delete;
+  animation-duration: 550ms;
+  animation-fill-mode: forwards;
+  animation-play-state: paused;
+
 }
 
 .row:hover {
@@ -17,8 +49,9 @@
 }
 
 .row div {
-  text-align: start;
+  text-align: left;
   width: 25%;
+  padding-top: 8px;
 }
 
 .archive, .dearchive {
@@ -28,8 +61,7 @@
   color: white;
   padding: 0px 20px;
   font-size: 16px;
-  display: flex; 
-  justify-content:flex-end;
+  height: 30px;
 }
 
 .dearchive:hover, .archive:hover, #response:hover {
