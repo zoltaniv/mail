@@ -59,7 +59,26 @@ function load_mailbox(mailbox) {
         // Craete div element class row ....................
         const element = document.createElement('div');
         element.className = 'row';
-        element.innerHTML = `From: ${email.sender} | Subject: ${email.subject} | Date: ${email.timestamp}`;
+
+        // Create div elements for From, Subject and Date fields
+        // and add the innerHTML content
+        const fromElement = document.createElement('div');
+        fromElement.className = 'from';
+        fromElement.innerHTML = `From: ${email.sender}`;
+        const subjectElement = document.createElement('div');
+        subjectElement.className = 'subject';
+        const subject = email.subject.slice(0, 30);
+        subjectElement.innerHTML = `Subject: ${subject}`;
+        const dateElement = document.createElement('div');
+        dateElement.className = 'date';
+        dateElement.innerHTML = `Date: ${email.timestamp}`;
+
+        // Add the above items to the element of the row class
+        element.append(fromElement);
+        element.append(subjectElement);
+        element.append(dateElement);
+
+        // element.innerHTML = `From: ${email.sender} | Subject: ${email.subject} | Date: ${email.timestamp}`;
         
         // Check, is the mail readed
         if (email.read === true) 
