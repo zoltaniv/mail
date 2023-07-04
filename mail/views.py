@@ -91,12 +91,15 @@ def mailbox(request, mailbox):
     else:
         return JsonResponse({"error": "Invalid mailbox."}, status=400)
 
+    # Get parameters 
+    start = int(request.GET["start"])
+    end = int(request.GET["end"])
     # Return emails in reverse chronologial order
     emails = emails.order_by("-timestamp").all()
-    return JsonResponse([email.serialize() for email in emails], safe=False)
+    return JsonResponse([email.serialize() for email in emails[start:end]], safe=False)
 
 
-@csrf_exempt
+@csrf_exempt    
 @login_required
 def email(request, email_id):
 
