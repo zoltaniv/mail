@@ -5,21 +5,21 @@ document.addEventListener("DOMContentLoaded", function () {
     // Show the mailbox name
     document.querySelector("#emails-view").innerHTML = "<h3>Inbox</h3>";
     // Start always with first email
-    counter = 1;
+    counter = 0;
     load_mailbox("inbox");
   });
   document.querySelector("#sent").addEventListener("click", () => {
     // Show the mailbox name
     document.querySelector("#emails-view").innerHTML = "<h3>Sent</h3>";
     // Start always with first email
-    counter = 1;
+    counter = 0;
     load_mailbox("sent");
   });
   document.querySelector("#archived").addEventListener("click", () => {
     // Show the mailbox name
     document.querySelector("#emails-view").innerHTML = "<h3>Archived</h3>";
     // Start always with first email
-    counter = 1;
+    counter = 0;
     load_mailbox("archive");
   });
   document.querySelector("#compose").addEventListener("click", compose_email);
@@ -61,7 +61,7 @@ function compose_emailResponse(recipient, subject, body) {
 
 // Load mailbox ======================================================================================================
 // Start with first email
-var counter = 1;
+var counter = 0;
 // Load emails 20 at a time
 const quantity = 20;
 function load_mailbox(mailbox) {
@@ -282,11 +282,8 @@ function send_email() {
         alert(result.error);
         return false;
       }
-      // Load send folder
-      load_mailbox("sent");
-      // Finish submit event
-      let myForm = document.querySelector("#compose-form");
-      myForm.requestSubmit("submit");
+      // Load the sent box by click event
+      document.querySelector("#sent").click();
     });
 }
 
